@@ -1,6 +1,6 @@
 FROM alpine:3.19
 
-RUN apk add --no-cache curl unzip bash
+RUN apk add --no-cache curl unzip bash nginx
 
 # Download Xray-core
 RUN curl -Lo /tmp/xray.zip \
@@ -12,10 +12,10 @@ RUN curl -Lo /tmp/xray.zip \
 WORKDIR /app
 
 COPY config.json    config.json
+COPY nginx.conf     /etc/nginx/nginx.conf
 COPY entrypoint.sh  entrypoint.sh
 RUN chmod +x entrypoint.sh
 
-# Apply.Build 边缘层负责 TLS，容器只需监听 HTTP
 EXPOSE 8080
 
 ENTRYPOINT ["./entrypoint.sh"]
